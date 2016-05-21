@@ -22,19 +22,18 @@ import org.json.JSONObject;
  * 
  */
 public class EventoDao {
-    Connection con;
-    Statement stmt = null;
-
-
+   
     /**
      * Mostra todos os eventos cadastrados
      * 
-     * @return	Retorna um ArryList com todos os eventos
+     * @return	Retorna um List com todos os eventos
      */
-    public List<Evento> mostrarEvento() {
+    public List<Evento> buscaTodosEventos() {
     	
     	ArrayList<Evento> eventos = new ArrayList<Evento>();
         try {
+        	Connection con;
+            Statement stmt = null;
             con = new ConectionFactory().getConnetion();
             con.setAutoCommit(false);
             stmt = con.createStatement();
@@ -44,30 +43,29 @@ public class EventoDao {
             while (rs.next()) {
                 int id = rs.getInt("id");
                 int userId = rs.getInt("id_usuario");
-                String horaEmbarque = rs.getString("hora_embarque");
-                String horaDesembarque = rs.getString("hora_desembarque");
+                Timestamp horaEmbarque = rs.getTimestamp("hora_embarque");
+                Timestamp horaDesembarque = rs.getTimestamp("hora_desembarque");
                 String tag = rs.getString("tag");
                 int nota = rs.getInt("nota");
-                int embarqueLatitude = rs.getInt("emb_lat");
-                int embarqueLongitude = rs.getInt("emb_long");
-                int destinoLatitude = rs.getInt("des_lat");
-                int destinoLongitude = rs.getInt("des_long");
+                double embarqueLatitude = rs.getDouble("emb_lat");
+                double embarqueLongitude = rs.getDouble("emb_long");
+                double destinoLatitude = rs.getDouble("des_lat");
+                double destinoLongitude = rs.getDouble("des_long");
                 Usuario usuario = dao.buscaUsuarioPorId(userId);
                                 
                 Evento evento = new Evento();
-                evento.setDesemb_lat(destinoLatitude);
-                evento.setDesemb_lon(destinoLongitude);
-                evento.setHora_desembarque(horaDesembarque);
-                evento.setHora_embarque(horaEmbarque);
+                evento.setDesembarqueLatitude(destinoLatitude);
+                evento.setDesembarqueLongitude(destinoLongitude);
+                evento.setDesembarqueHora(horaDesembarque);
+                evento.setEmbarqueHora(horaEmbarque);
                 evento.setNota(nota);
-                evento.setEmb_lat(embarqueLatitude);
-                evento.setEmb_lon(embarqueLongitude);
+                evento.setEmbarqueLatitude(embarqueLatitude);
+                evento.setEmbarqueLongitude(embarqueLongitude);
                 evento.setTAG(tag);
                 evento.setId(id);
                 evento.setUsuario(usuario);                
                 
                 eventos.add(evento);
-                System.out.println("Efetuado com sucesso");
             }
             stmt.close();
 
@@ -80,19 +78,18 @@ public class EventoDao {
     /**
  	* Exclui Evento cadastrado no banco de dados
  	* 
- 	* @param evento  Objeto do tipo Evento com o evento que será removido
+ 	* @param evento  Objeto Evento que será removido
  	*/
     public void excluiEvento(Evento evento) {
         try {
-            con = new ConectionFactory().getConnetion();
+            Connection con = new ConectionFactory().getConnetion();
             con.setAutoCommit(false);
-            stmt = con.createStatement();
+            Statement stmt = con.createStatement();
             String sql = "DELETE FROM evento WHERE id = '" + evento.getId() + "';";
             stmt.executeUpdate(sql);
             con.commit();
             con.close();
             stmt.close();
-            System.out.println("Excluido com sucesso");
         } catch (Exception e) {
             System.err.println(e.getClass().getName() + ": " + e.getMessage());
         }        
@@ -104,29 +101,39 @@ public class EventoDao {
      * @param evento  Objeto do tipo Evento com o evento que será cadastrado
      */
     public void insereEvento(Evento evento) {
+    	// TODO mover connection e statement para dentro do try
+    	Connection con;
+        Statement stmt = null;
         try {
             con = new ConectionFactory().getConnetion();
             con.setAutoCommit(false);
-            Timestamp hora = new Timestamp(System.currentTimeMillis());
             stmt = con.createStatement();
             String sql = "INSERT INTO EVENTO (ID_USUARIO,HORA_EMBARQUE,HORA_DESEMBARQUE,TAG,NOTA,EMB_LAT,EMB_LONG,DES_LAT,DES_LONG) "
-					+ "VALUES ('"+evento.getUsuario().getId()
+					+ "VALUES ('"
+            		+evento.getUsuario().getId()
 					+"','"
-					+ hora
+					+evento.getEmbarqueHora()
 					+"', '"
-					+hora+"', '"
-					+evento.getTAG()+"', '"+evento.getNota()+"', '"+evento.getEmb_lat()
-					+"', '"+evento.getEmb_lon()+"', '0', '0');";
+					+evento.getDesembarqueHora()
+					+"', '"
+					+evento.getTAG()
+					+"', '"
+					+evento.getNota()
+					+"', '"
+					+evento.getEmbarqueLatitude()
+					+"', '"
+					+evento.getEmbarqueLongitude()
+					+"', '"
+					+evento.getDesembarqueLatitude()
+					+"', '"
+					+evento.getDesembarqueLongitude()
+					+"');";
 
             stmt.executeUpdate(sql);
             con.commit();
             stmt.close();
             con.close();
-
-            System.out.println("Criado com sucesso");
-            
         } catch (Exception e) {
-        	System.out.println("Erro: Evento não criado!");
             System.err.println(e.getClass().getName() + ": " + e.getMessage());
         }        
     }
@@ -137,8 +144,9 @@ public class EventoDao {
      * @param id  Um inteiro com o id do Evento a ser buscado
      * @return    Retorna um Objeto do tipo Evento com o evento buscado
      */
-    public Evento buscaEvento(int id){
-    	
+    public Evento buscaEventoPorId(int id){
+    	Connection con;
+        Statement stmt = null;
     	con = new ConectionFactory().getConnetion();
     	try {
 			con.setAutoCommit(false);
@@ -151,19 +159,18 @@ public class EventoDao {
 	        
 	        Evento evento = new Evento();
 	        evento.setUsuario(usuario);
-	        evento.setHora_embarque(rs.getString("HORA_EMBARQUE"));
-	        evento.setHora_desembarque( rs.getString("hora_desembarque"));
+	        evento.setEmbarqueHora(rs.getTimestamp("HORA_EMBARQUE"));
+	        evento.setDesembarqueHora( rs.getTimestamp("hora_desembarque"));
 	        evento.setId(rs.getInt("id"));
 	        evento.setTAG(rs.getString("tag"));
 	        evento.setNota(rs.getInt("nota"));
-	        evento.setEmb_lat(rs.getInt("emb_lat"));
-	        evento.setEmb_lon(rs.getInt("emb_long"));
-	        evento.setDesemb_lat(rs.getInt("des_lat"));
-	        evento.setDesemb_lon(rs.getInt("des_long"));	        
+	        evento.setEmbarqueLatitude(rs.getDouble("emb_lat"));
+	        evento.setEmbarqueLongitude(rs.getDouble("emb_long"));
+	        evento.setDesembarqueLatitude(rs.getDouble("des_lat"));
+	        evento.setDesembarqueLongitude(rs.getDouble("des_long"));	        
 	        return evento;
 	        
 		} catch (SQLException e) {
-			System.out.println("Erro na busca!");
 			e.printStackTrace();
 			return null;
 		}
@@ -174,26 +181,37 @@ public class EventoDao {
      * 
      * @param evento  Objeto do tipo Evento com o evento que será atualizado
      */
-    public void updateEvento(Evento evento){
+    public void atualizarEvento(Evento evento){
+    	Connection con;
+        Statement stmt = null;
     	try {
             con = new ConectionFactory().getConnetion();
             con.setAutoCommit(false);
             stmt = con.createStatement();
-            String sql = "UPDATE EVENTO set HORA_DESEMBARQUE = '"+evento.getHora_desembarque()+"' where ID="+evento.getId()+";"
-            			+"UPDATE EVENTO set HORA_EMBARQUE = '"+evento.getHora_embarque()+"' where ID="+evento.getId()+";"
-            			+"UPDATE EVENTO set EMB_LAT = '"+evento.getEmb_lat()+"' where ID="+evento.getId()+";"
-            			+"UPDATE EVENTO set EMB_LONG = '"+evento.getEmb_lon()+"' where ID="+evento.getId()+";"
-						+"UPDATE EVENTO set DES_LAT = '"+evento.getDesemb_lat()+"' where ID="+evento.getId()+";"
-						+"UPDATE EVENTO set DES_LONG = '"+evento.getDesemb_lon()+"' where ID="+evento.getId()+";"
-						+"UPDATE EVENTO set TAG = '"+evento.getTAG()+"' where ID="+evento.getId()+";"
-						+"UPDATE EVENTO set NOTA = '"+evento.getNota()+"' where ID="+evento.getId()+";";
+            
+            String sql = "UPDATE EVENTO set HORA_DESEMBARQUE = '"+evento.getDesembarqueHora()
+						+"', HORA_EMBARQUE = '"+evento.getEmbarqueHora()
+						+"', EMB_LAT = '"+evento.getEmbarqueLatitude()
+						+"', EMB_LONG = '"+evento.getEmbarqueLongitude()
+						+"', DES_LAT = '"+evento.getDesembarqueLatitude()
+						+"', DES_LONG = '"+evento.getDesembarqueLongitude()
+						+"', TAG = '"+evento.getTAG()
+						+"', NOTA = '"+evento.getNota()+"' where ID= '"+evento.getId()+"';";
+
+//            String sql = "UPDATE EVENTO set HORA_DESEMBARQUE = '"+evento.getDesembarqueHora()+"' where ID="+evento.getId()+";"
+//            			+"UPDATE EVENTO set HORA_EMBARQUE = '"+evento.getEmbarqueHora()+"' where ID="+evento.getId()+";"
+//            			+"UPDATE EVENTO set EMB_LAT = '"+evento.getEmbarqueLatitude()+"' where ID="+evento.getId()+";"
+//            			+"UPDATE EVENTO set EMB_LONG = '"+evento.getEmbarqueLongitude()+"' where ID="+evento.getId()+";"
+//						+"UPDATE EVENTO set DES_LAT = '"+evento.getDesembarqueLatitude()+"' where ID="+evento.getId()+";"
+//						+"UPDATE EVENTO set DES_LONG = '"+evento.getDesembarqueLongitude()+"' where ID="+evento.getId()+";"
+//						+"UPDATE EVENTO set TAG = '"+evento.getTAG()+"' where ID="+evento.getId()+";"
+//						+"UPDATE EVENTO set NOTA = '"+evento.getNota()+"' where ID="+evento.getId()+";";
+            
             stmt.executeUpdate(sql);
             con.commit();
             stmt.close();
             con.close();
-            System.out.println("Evento atualizado!");
         } catch (Exception e) {
-        	System.out.println("Erro: Evento não atualizado!");
             System.err.println(e.getClass().getName() + ": " + e.getMessage());
         }
     }
@@ -208,15 +226,15 @@ public class EventoDao {
     	JSONObject my_obj = new JSONObject();
 
     	my_obj.put("idusuario",evento.getUsuario().getId());
-    	my_obj.put("horaembarque",evento.getHora_embarque());
-    	my_obj.put("horadesembarque",evento.getHora_desembarque());
+    	my_obj.put("horaembarque",evento.getEmbarqueHora());
+    	my_obj.put("horadesembarque",evento.getDesembarqueHora());
     	my_obj.put("id",evento.getId());
     	my_obj.put("tag",evento.getTAG());
     	my_obj.put("nota",evento.getNota());
-    	my_obj.put("embarquelatitude",evento.getEmb_lat());
-    	my_obj.put("embarquelongitude",evento.getEmb_lon());
-    	my_obj.put("desembarquelatitude",evento.getDesemb_lat());
-    	my_obj.put("desembarquelongitude",evento.getDesemb_lon());
+    	my_obj.put("embarquelatitude",evento.getEmbarqueLatitude());
+    	my_obj.put("embarquelongitude",evento.getEmbarqueLongitude());
+    	my_obj.put("desembarquelatitude",evento.getDesembarqueLatitude());
+    	my_obj.put("desembarquelongitude",evento.getDesembarqueLongitude());
     	
     	String json_evt = my_obj.toString();
 		return json_evt;
@@ -228,7 +246,6 @@ public class EventoDao {
      * @param jsonEvento	String JSON que será transformada em um ojeto do tipo Evento
      * @return        		Retorna um Objeto do tipo Evento da StringJSON
      */
-    //recebe a String Jsom e retorna um Obj Evento
     public Evento fromJson(String jsonEvento){
     	JSONObject obj = new JSONObject(jsonEvento);
     	Evento evento = new Evento();
@@ -239,14 +256,15 @@ public class EventoDao {
     	
     	if (obj.has("id"))evento.setId(obj.getInt("id"));
     	
-    	evento.setHora_desembarque(obj.getString("horadesembarque"));
-    	evento.setHora_embarque(obj.getString("horaembarque"));
+    	//converter Timestamp em String
+    	//evento.setDesembarqueHora(obj.getString("horadesembarque"));
+    	//evento.setEmbarqueHora(obj.getString("horaembarque"));
     	evento.setTAG(obj.getString("tag"));
     	evento.setNota(obj.getInt("nota"));
-    	evento.setEmb_lat(obj.getInt("embarquelatitude"));
-    	evento.setEmb_lon(obj.getInt("embarquelongitude"));
-    	evento.setDesemb_lat(obj.getInt("desembarquelatitude"));
-    	evento.setDesemb_lon(obj.getInt("desembarquelongitude"));
+    	evento.setEmbarqueLatitude(obj.getDouble("embarquelatitude"));
+    	evento.setEmbarqueLongitude(obj.getDouble("embarquelongitude"));
+    	evento.setDesembarqueLatitude(obj.getDouble("desembarquelatitude"));
+    	evento.setDesembarqueLongitude(obj.getDouble("desembarquelongitude"));
 
 		return evento;
     }

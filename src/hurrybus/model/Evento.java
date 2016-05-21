@@ -1,5 +1,7 @@
 package hurrybus.model;
 
+import java.sql.Timestamp;
+
 /**
  *	Classe que define o modelo de evento
  * 
@@ -8,50 +10,58 @@ package hurrybus.model;
  * 
  */
 public class Evento {
-    
+	
 	private int Id;
 	private Usuario usuario;
-	private String hora_embarque; 
-	private String hora_desembarque;
-	private Integer emb_lat, emb_lon; 
-	private Integer desemb_lat, desemb_lon;
+	private Timestamp embarqueHora; 
+	private Timestamp desembarqueHora;
+	private double embarqueLatitude, embarqueLongitude; 
+	private double desembarqueLatitude, desembarqueLongitude;
 	private Integer nota; 
+	// TODO renomar para minusculo
 	private String TAG;
 
+	
+    /**
+     * @return retorno da variável usuario
+     */
 	public Usuario getUsuario() {
 		return usuario;
 	}
 	
+    /**
+     * @param usuario inicializa a variavel usuario
+     */
 	public void setUsuario(Usuario usuario) {
 		this.usuario = usuario;
 	}
 	
     /**
-     * @return retorno da variável hora_embarque
+     * @return retorno da variável embarqueHora
      */
-    public String getHora_embarque() {
-        return hora_embarque;
+    public Timestamp getEmbarqueHora() {
+        return embarqueHora;
     }
 
     /**
-     * @param hora_embarque inicializa a variavel hora_embarque
+     * @param embarqueHora inicializa a variavel embarqueHora
      */
-    public void setHora_embarque(String hora_embarque) {
-        this.hora_embarque = hora_embarque;
+    public void setEmbarqueHora(Timestamp embarqueHora) {
+        this.embarqueHora = embarqueHora;
     }
 
     /**
-     * @return retorno da variável hora_desembarque
+     * @return retorno da variável desembarqueHora
      */
-    public String getHora_desembarque() {
-        return hora_desembarque;
+    public Timestamp getDesembarqueHora() {
+        return desembarqueHora;
     }
 
     /**
-     * @param hora_desembarque inicializa a variavel hora_desmbarque
+     * @param desembarqueHora inicializa a variavel hora_desmbarque
      */
-    public void setHora_desembarque(String hora) {
-        this.hora_desembarque = hora;
+    public void setDesembarqueHora(Timestamp hora) {
+        this.desembarqueHora = hora;
     }
 
     /**
@@ -71,57 +81,57 @@ public class Evento {
 	/**
      * @return retorno da variável emb_lat
      */
-	public Integer getEmb_lat() {
-		return emb_lat;
+	public double getEmbarqueLatitude() {
+		return embarqueLatitude;
 	}
 
     /**
      * @param emb_lat inicializa a variavel emb_lat
      */
-	public void setEmb_lat(Integer emb_lat) {
-		this.emb_lat = emb_lat;
+	public void setEmbarqueLatitude(double emb_lat) {
+		this.embarqueLatitude = emb_lat;
 	}
 
 	/**
      * @return retorno da variável emb_lon
      */
-	public Integer getEmb_lon() {
-		return emb_lon;
+	public double getEmbarqueLongitude() {
+		return embarqueLongitude;
 	}
 
     /**
      * @param emb_lon inicializa a variavel emb_lon
      */
-	public void setEmb_lon(Integer emb_lon) {
-		this.emb_lon = emb_lon;
+	public void setEmbarqueLongitude(double emb_lon) {
+		this.embarqueLongitude = emb_lon;
 	}
 
 	/**
-     * @return retorno da variável desemb_lat
+     * @return retorno da variável desembarqueLatitude
      */
-	public Integer getDesemb_lat() {
-		return desemb_lat;
+	public double getDesembarqueLatitude() {
+		return desembarqueLatitude;
 	}
 
     /**
-     * @param desemb_lat inicializa a variavel desemb_lat
+     * @param desembarqueLatitude inicializa a variavel desembarqueLatitude
      */
-	public void setDesemb_lat(Integer desemb_lat) {
-		this.desemb_lat = desemb_lat;
+	public void setDesembarqueLatitude(double desembarqueLatitude) {
+		this.desembarqueLatitude = desembarqueLatitude;
 	}
 
 	/**
-     * @return retorno da variável desemb_lon
+     * @return retorno da variável desembarqueLongitude
      */
-	public Integer getDesemb_lon() {
-		return desemb_lon;
+	public double getDesembarqueLongitude() {
+		return desembarqueLongitude;
 	}
 	
     /**
-     * @param desemb_lon inicializa a variavel desemb_lon
+     * @param desembarqueLongitude inicializa a variavel desembarqueLongitude
      */
-	public void setDesemb_lon(Integer desemb_lon) {
-		this.desemb_lon = desemb_lon;
+	public void setDesembarqueLongitude(double desembarqueLongitude) {
+		this.desembarqueLongitude = desembarqueLongitude;
 	}
 
 	/**
@@ -134,7 +144,7 @@ public class Evento {
     /**
      * @param TAG inicializa a variavel TAG
      */
-	public void setTAG(String tAG) {
+	public void setTAG(String tAG) { // TODO tudo minusculo
 		TAG = tAG;
 	}
 
@@ -155,9 +165,9 @@ public class Evento {
 
 	@Override
 	public String toString() {
-		return "Evento [Id=" + Id + ", Id_user=" + usuario.getId() + ", hora_embarque=" + hora_embarque + ", hora_desembarque="
-				+ hora_desembarque + ", emb_lat=" + emb_lat + ", emb_lon=" + emb_lon + ", desemb_lat=" + desemb_lat
-				+ ", desemb_lon=" + desemb_lon + ", nota=" + nota + ", TAG=" + TAG + "]";
+		return "Evento [Id=" + Id + ", idUser=" + usuario.getId() + ", embarqueHora=" + embarqueHora + ", desembarqueHora="
+				+ desembarqueHora + ", embarqueLatitude=" + embarqueLatitude + ", embarqueLongitude=" + embarqueLongitude + ", desembarqueLatitude=" + desembarqueLatitude
+				+ ", desembarqueLongitude=" + desembarqueLongitude + ", nota=" + nota + ", TAG=" + TAG + "]";
 	}
     
 }

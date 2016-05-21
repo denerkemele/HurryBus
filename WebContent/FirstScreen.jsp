@@ -12,7 +12,7 @@ Hurry Bus
 	<div class="form-group">
 	    <label for="inputsm">Email</label>
 	    <input class="form-control" id="email" name="email" type="text">
-	    <br>
+	    </br>
 	    <label for="inputsm">Senha</label>
 	    <input class="form-control" id="email" name="email" type="text">
 	</div>
