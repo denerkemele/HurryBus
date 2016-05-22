@@ -248,8 +248,8 @@
 
 							<div class="col-sm-12 controls">
 
-								<input type="submit" id="cadastrar" id="cadastrar"
-									class="btn btn-success" value="Atualiar" />
+								<input type="submit" id="cadastrar" class="btn btn-success"
+									value="Atualiar" />
 
 							</div>
 						</div>
