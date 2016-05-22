@@ -64,7 +64,7 @@
 
 						<div style="margin-bottom: 25px" class="input-group">
 							<span class="input-group-addon"><i
-								class="glyphicon glyphicon-lock"></i></span> <input id="senha"
+								class="glyphicon glyphicon-asterisk"></i></span> <input id="senha"
 								type="password" class="form-control" name="senha"
 								placeholder="Senha">
 						</div>
@@ -109,7 +109,7 @@
 			</div>
 		</div>
 	</div>
-	
+
 
 
 
