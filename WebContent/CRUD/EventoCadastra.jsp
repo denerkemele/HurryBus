@@ -226,7 +226,7 @@
 
 							<div class="col-sm-12 controls">
 
-								<input type="submit" id="cadastrar" id="cadastrar"
+								<input type="submit" id="cadastrar" 
 									class="btn btn-success" value="Cadastrar" />
 
 							</div>
