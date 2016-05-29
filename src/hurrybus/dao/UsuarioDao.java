@@ -22,6 +22,40 @@ public class UsuarioDao {
     * 
     * @return	Retorna um List com todos os Usuários
     */
+	private Connection connection;
+	public UsuarioDao (){
+		
+		this.connection = new ConectionFactory().getConnetion();
+		
+	}
+	
+  public boolean verificaUsuario(Usuario usuarios ) {
+			
+	    	/*if (this.name != null && this.senha != null){
+		    	if (this.name.equals("teste") && this.senha.equals("123")){
+		    		return true;
+		    		
+		    	}
+	        }*/
+	  
+	  String sql = "select * from usuarios where nome = ? and senha = ?";
+	  try {
+	  PreparedStatement ps = connection.prepareStatement(sql);
+	  ps.setString(1, usuarios.getName());
+	  ps.setString(2, usuarios.getSenha());
+	  ResultSet resultset = ps.executeQuery();
+	  	if (resultset.next())
+	  		return true;
+	  }
+	  catch (SQLException erro){
+		  
+		  
+	  }
+	  
+	    	return false;
+		}
+	    
+	
     public List<Usuario> buscarTodosUsuarios() {
         Connection con;
         Statement stmt;
