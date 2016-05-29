@@ -1,5 +1,8 @@
 <%@ page language="java" contentType="text/html; charset=ISO-8859-1"
 	pageEncoding="ISO-8859-1"%>
+	
+<%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
+	
 <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
 <html>
 <head>
@@ -7,7 +10,7 @@
 <link rel="stylesheet" type="text/css" href="css/stilo.css" />
 </head>
 <body>
-	<form action="ServeletLogar" method="get">
+	<form action="ServletLogar" >
 		<div class="container">
 			<div class="row vertical-offset-100">
 				<div class="col-md-4 col-md-offset-4">
@@ -35,6 +38,16 @@
 										value="Login">
 									<input class="btn btn-lg btn-success btn-block" type="reset"
 										value="Limpar">
+									
+									<c:choose>
+										<c:when test = "${mensagem!= null}">
+											${mensagem}
+										</c:when>
+										<c:otherwise>
+										<br>
+											Entre com usuario/senha
+										</c:otherwise>
+									</c:choose>	
 										
 								</fieldset>
 							</form>
