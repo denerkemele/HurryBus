@@ -1,8 +1,10 @@
 package hurrybus;
 
+
 import java.util.ArrayList;
 import java.util.Collection;
 
+//import javax.servlet.RequestDispatcher;
 import javax.ws.rs.Consumes;
 import javax.ws.rs.DELETE;
 import javax.ws.rs.GET;
@@ -16,6 +18,9 @@ import javax.ws.rs.core.Response;
 
 import org.json.JSONArray;
 import org.json.JSONObject;
+
+
+
 
 import hurrybus.model.Usuario;
 import hurrybus.dao.UsuarioDao;
@@ -44,11 +49,124 @@ public class UsuarioHandler {
 	@Produces(MediaType.APPLICATION_JSON)
 	public Response insereUsuario(String StringJSON){
 		// TODO renomear StringJson para usuarioJson
+		
+		
+		
 		UsuarioDao dao = new UsuarioDao();
 		Usuario user = dao.fromJson(StringJSON);
 		dao.insereUsuario(user);
 		return Response.ok().build();
 	}
+	
+	
+	@POST
+	@Path("/login")
+	@Consumes(MediaType.APPLICATION_JSON)
+	@Produces(MediaType.APPLICATION_JSON)
+	public Response verificaUsuario(String StringJSON)  {
+		
+		/*String usuario = request.getParameter("email");
+		String senha  = request.getParameter("password") ; 
+//		String status = "";8*/
+		
+	/*	Usuario usuarios = new Usuario();
+		
+		usuarios.setName(usuario);
+		usuarios.setSenha(senha);
+		//RequestDispatcher rd = null;
+		
+		UsuarioDao usuarioDao = new UsuarioDao();*/
+		
+	
+		// System.out.println(user.toString() );
+		 
+		 
+		 //System.out.println("ok" );
+		 //return Response.ok().build();
+		//dao.verificaUsuario(user);
+		 /*Serializable uri = new URI("/login/success");
+	      
+		 Serializable uri2= new URI("http://localhost:9090/NewWebServiceproject/new/login/failure");*/
+	
+		////////////////////////////////////inicio
+		UsuarioDao dao = new UsuarioDao();
+		Usuario user = dao.loginJson(StringJSON);
+		if (dao.verificaUsuario(user)){
+			
+			
+		
+			
+		    	System.out.println("okww" );
+		    	return Response.status(200).build();
+		    	//return Response.ok(200).build();
+		    	 //return Response.status(200).entity(StringJSON).build();
+		    	
+		//	return Response.temporaryRedirect((java.net.URI) uri).build();
+			
+			
+		} else {
+		
+			System.out.println("error" );
+		    	return Response.status(404).build();
+			
+			//return Response.temporaryRedirect((java.net.URI) uri2).build();
+		
+		}
+		/////////////////////////////////////////fim
+	
+		
+		// TODO renomear StringJson para usuarioJson
+		
+		
+		//RequestDispatcher rd = null;
+		
+		
+		/*UsuarioDao dao = new UsuarioDao();
+		Usuario user = dao.fromJson(StringJSON);
+		
+		user.setName("nome");
+    	user.setSenha("senha");
+    	
+    	dao.verificaUsuario(user);*/
+		/*
+		 System.out.println("ok" );
+    	return Response.ok(200).build();*/
+    	//return  Response.ok().entity(StringJSON).build();
+    	
+    	//return Response.ok("ok").build();
+   	/*
+    	if (dao.verificaUsuario(user)){
+		 //			status = "usuario valido";
+			rd  = request.getRequestDispatcher("/CRUD/index.jsp");
+			rd.forward(request,response);
+	
+		} else {
+		//			status = "Não valido";
+			request.setAttribute("mensagem","<br>usuario ou senha invalido"	);
+			rd  = request.getRequestDispatcher("/CRUD/login.jsp");
+			rd.forward(request,response);	
+		}*/
+		
+		//dao.insereUsuario(user);
+		/*UsuarioDao dao = new UsuarioDao();
+		Usuario user = dao.fromJson(StringJSON);*/
+		
+		
+	/*	if(dao.verificaUsuario(user)== true )
+		{
+			System.out.println("ok");
+			return Response.ok("ok").build();
+		}
+		else{
+			return Response.ok("not").build();
+		}
+		*/
+		
+		
+		
+	}
+	
+	
 	
 	
    /**
